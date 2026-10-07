@@ -40,6 +40,12 @@ npm test
 - Start the storefront in another terminal: `npm run dev:frontend`.
 - On the same Wi-Fi network as your computer, open the Network URL printed by Next.js, such as `http://10.11.41.60:3000`. Do not use `localhost` on your phone: that name points to the phone itself. The API listens on the computer's network interfaces and allows local Wi-Fi storefront requests while running in development.
 
+## Deploy to Vercel
+- Deploy `frontend` as the storefront project and `backend` as a separate Express project from this repository. The backend's root `index.ts` exports the Express app for Vercel; it connects to MongoDB and initializes the catalogue/admin account on demand.
+- Set the backend's Production environment variables in Vercel: `MONGODB_URI`, `JWT_SECRET` (at least 32 random characters), `ADMIN_EMAIL`, `ADMIN_PASSWORD` (at least 12 characters), and `FRONTEND_ORIGINS` (the exact public storefront origin, such as `https://fabbazaar.vercel.app`). Never put these values in source control.
+- In MongoDB Atlas, allow Vercel's serverless connections and scope the application database user to the `fabbazaar` database. `0.0.0.0/0` allows connections from any IP and should only be used with a strong, private database password and least-privilege database access.
+- Set the frontend's Production `NEXT_PUBLIC_API_URL` to the absolute API origin followed by `/api`, for example `https://fabbazaar-api.vercel.app/api`, then redeploy the storefront.
+
 ## Customer and administrator sign-in
 - Customer accounts can be created from the storefront sign-in page.
 - Registration, customer IDs, profile updates, password changes, account deletion requests, and order records are stored in MongoDB.
@@ -53,7 +59,7 @@ npm test
 The `Riwaz 93x108` source folder contains 13 designs, each with A/B/C colour variants and six photos per variant. The storefront lists all 39 variants at ₹699 (MRP ₹2,399), with each set described as one 93 × 108 inch bedsheet and two matching pillow covers. Product photos are converted to optimized WebP files in `frontend/public/images/riwaz` for web delivery.
 
 ## Product, support and promotion tools
-- Administrators can create and edit catalogue listings on `/admin/products`. The separate listing editor accepts up to six JPEG, PNG, WebP or AVIF images, each no larger than 10 MB. The API stores uploaded images in `backend/uploads` and the storefront proxies them through `/uploads`.
+- Administrators can create and edit catalogue listings on `/admin/products`. The separate listing editor accepts up to six JPEG, PNG, WebP or AVIF images, each no larger than 10 MB. Local deployments store uploaded images in `backend/uploads` and the storefront proxies them through `/uploads`. Image uploads are disabled on Vercel until persistent object storage is configured; serverless filesystems are not durable.
 - Product listings can be assigned to Rivaaz, Jaipuri Collection or Bazaar Exclusive; shoppers can filter those collections on the product page.
 - `/support` provides automated answers for product, shipping, cancellation and damaged-parcel questions. Submissions are saved as support tickets in MongoDB; administrators review and resolve them at `/admin/support`.
 - To send ticket notifications automatically, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD` and `SUPPORT_EMAIL` in `backend/.env`. Without SMTP credentials, tickets are still saved and the support page offers a prepared email to `support@fabbazaar.com` for the customer to send.

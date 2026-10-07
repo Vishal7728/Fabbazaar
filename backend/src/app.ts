@@ -14,6 +14,7 @@ import promotionRoutes from './routes/promotions';
 import { uploadsDirectory } from './lib/uploads';
 import { ZodError } from 'zod';
 import { allowedOrigins, authenticationRateLimit, isLocalDevelopmentOrigin, securityHeaders, supportRequestRateLimit } from './middleware/security';
+import { initializeApplication } from './bootstrap';
 
 dotenv.config();
 
@@ -27,6 +28,18 @@ app.use(cors({
   ))
 }));
 app.use(express.json({ limit: '2mb' }));
+
+if (process.env.VERCEL === '1' && process.env.NODE_ENV !== 'test') {
+  app.use(async (_req, res, next) => {
+    try {
+      await initializeApplication();
+      next();
+    } catch (error) {
+      console.error('Serverless API initialization failed', error);
+      res.status(503).json({ error: 'API initialization failed; please try again shortly' });
+    }
+  });
+}
 
 app.get('/api/health', (_, res) => {
   res.json({ status: 'ok', app: 'FabBazaar API', timestamp: new Date().toISOString() });
@@ -43,7 +56,13 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/admin/uploads', uploadRoutes);
+if (process.env.VERCEL === '1') {
+  app.use('/api/admin/uploads', (_req, res) => {
+    res.status(503).json({ error: 'Image uploads require persistent storage and are disabled on this deployment' });
+  });
+} else {
+  app.use('/api/admin/uploads', uploadRoutes);
+}
 app.use('/api/support/tickets', supportRequestRateLimit);
 app.use('/api/support', supportRoutes);
 app.use('/api/promotions', promotionRoutes);
