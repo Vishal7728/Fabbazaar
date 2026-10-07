@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --shadow-soft: none;
+}
+
+:root {
+  color-scheme: light;
+  --brand-50: #f9f7f1;
+  --brand-100: #f0e7db;
+  --brand-200: #e5d0aa;
+  --brand-300: #d5b37b;
+  --brand-400: #b9864f;
+  --brand-500: #8d5d2b;
+  --brand-600: #684322;
+  --brand-700: #50351d;
+  --brand-800: #2d2017;
+  --brand-900: #170f0c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-brand-900;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f7f1e5;
+  background-image: linear-gradient(rgba(250, 246, 235, 0.7), rgba(250, 246, 235, 0.7)), url('/images/jaipur-blockprint-seamless.svg');
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: auto, 240px 240px;
+  background-repeat: repeat;
+}
+
+@media (max-width: 640px) {
+  body { background-size: auto, 200px 200px; background-position: center top; }
+}
+
+[data-theme='dark'] body {
+  color: #f4ead9;
+  background-color: #211e19;
+  background-image: linear-gradient(rgba(27, 26, 22, 0.82), rgba(27, 26, 22, 0.82)), url('/images/jaipur-blockprint-seamless.svg');
+}
+[data-theme='dark'] { color-scheme: dark; }
+
+[data-theme='dark'] .bg-white { background-color: #28251f !important; }
+[data-theme='dark'] .bg-brand-50 { background-color: #302c25 !important; }
+[data-theme='dark'] .bg-brand-100 { background-color: #393328 !important; }
+[data-theme='dark'] .text-brand-900,
+[data-theme='dark'] .text-brand-800,
+[data-theme='dark'] .text-brand-700 { color: #f4ead9 !important; }
+[data-theme='dark'] .text-brand-600 { color: #d0c1a8 !important; }
+[data-theme='dark'] .border-brand-100,
+[data-theme='dark'] .border-brand-200 { border-color: #51483a !important; }
+[data-theme='dark'] input,
+[data-theme='dark'] textarea,
+[data-theme='dark'] select { color: #f4ead9; background-color: #302c25; }
+[data-theme='dark'] input::placeholder,
+[data-theme='dark'] textarea::placeholder { color: #c0b39c; }
+
+h1, h2, h3, h4 {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+button, a {
+  transition: all 0.2s ease;
+}
+
+.auth-page { position: relative; isolation: isolate; }
+.auth-page::before,
+.auth-page::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: clamp(8rem, 22vw, 15rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(108, 129, 101, 0.34);
+  border-radius: 48% 52% 45% 55%;
+  background: url('/images/rajasthani-floral-jaal.svg') center / 8rem repeat;
+  opacity: 0.32;
+  pointer-events: none;
+}
+.auth-page::before { top: 0; right: 0; transform: translate(28%, -20%) rotate(18deg); }
+.auth-page::after { bottom: 0; left: 0; transform: translate(-28%, 20%) rotate(-18deg); }
+
+@media (max-width: 639px) {
+  .mx-auto[class*='max-w-'] {
+    padding-inline: 1.25rem;
+  }
+}
+
+input,
+textarea,
+select {
+  color: var(--brand-900);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a99c8d;
+}
+
+.navbar-search-button {
+  color: #211711;
+}

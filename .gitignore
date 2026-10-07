@@ -1,0 +1,17 @@
+# Local dependencies and generated output
+**/node_modules/
+**/dist/
+**/.next/
+**/out/
+**/*.tsbuildinfo
+.npm-cache/
+backend/uploads/
+
+# Local configuration and credentials
+.env*
+!.env.example
+!**/.env.example
+
+# Local-only workspace files and original photo archive
+.claude/
+Riwaz 93x108/
