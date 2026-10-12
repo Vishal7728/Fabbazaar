@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight, LogOut, Search, ShieldCheck, Users } from 'lucide-react';
 import { AdminOrdersPanel } from '@/components/admin-orders-panel';
 import { AdminOverview } from '@/components/admin-overview';
+import { AdminBannerManager } from '@/components/admin-banner-manager';
 
 type AdminUser = { name: string; email: string; role: 'admin' };
 type CustomerRow = {
@@ -215,6 +216,8 @@ export default function AdminPage() {
         <Link href="/admin/promotions" className="rounded-2xl border border-brand-200 bg-white p-5 hover:border-brand-400"><p className="font-serif text-xl text-brand-900">Promotion codes</p><p className="mt-1 text-sm text-brand-600">Create checkout discounts and set expiry or minimum order values.</p></Link>
         <Link href="/admin/support" className="rounded-2xl border border-brand-200 bg-white p-5 hover:border-brand-400"><p className="font-serif text-xl text-brand-900">Support inbox</p><p className="mt-1 text-sm text-brand-600">Review customer enquiries, shipping issues and damaged parcel reports.</p></Link>
       </div>
+
+      <AdminBannerManager />
 
       <div className="mt-8 grid gap-5 md:grid-cols-[0.7fr_1.3fr]">
         <article className="rounded-3xl border border-brand-200 bg-white p-7">

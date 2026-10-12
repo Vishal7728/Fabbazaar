@@ -5,6 +5,7 @@ import { Customer } from '../models/Customer';
 import { Order } from '../models/Order';
 import { getProducts, replaceProducts } from '../lib/store';
 import { Product } from '../models/Product';
+import { SiteBanner } from '../models/SiteBanner';
 
 const router = Router();
 router.use(requireAuth, requireAdmin);
@@ -29,6 +30,34 @@ const productSchema = z.object({
   newArrival: z.boolean().default(false),
   tags: z.array(z.string().trim().min(1).max(40)).max(30).default([])
 });
+
+const homepageBannerSchema = z.object({
+  productId: z.string().trim().min(1).max(180),
+  productSlug: z.string().trim().min(1).max(140),
+  productName: z.string().trim().min(2).max(140),
+  image: z.string().trim().min(1).max(2048).refine((value) => value.startsWith('/') || /^https?:\/\//i.test(value), 'Use a site image path or an http(s) image URL.'),
+  eyebrow: z.string().trim().min(1).max(60),
+  title: z.string().trim().min(2).max(120),
+  description: z.string().trim().min(2).max(280),
+  buttonText: z.string().trim().min(1).max(40)
+});
+
+router.get('/banner', asyncHandler(async (_req, res) => {
+  const banner = await SiteBanner.findOne({ key: 'homepage' }).select('-_id -key -createdAt -updatedAt -__v').lean();
+  return res.json({ data: banner ?? null });
+}));
+
+router.put('/banner', asyncHandler(async (req, res) => {
+  const payload = homepageBannerSchema.parse(req.body);
+  const product = getProducts().find((entry) => entry.id === payload.productId && entry.slug === payload.productSlug);
+  if (!product) return res.status(400).json({ error: 'Choose a product that is currently in the catalogue.' });
+  const banner = await SiteBanner.findOneAndUpdate(
+    { key: 'homepage' },
+    { $set: { ...payload, productName: product.name, key: 'homepage' } },
+    { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+  ).select('-_id -key -createdAt -updatedAt -__v').lean();
+  return res.json({ data: banner });
+}));
 
 router.get('/products', (_req, res) => res.json({ data: getProducts() }));
 

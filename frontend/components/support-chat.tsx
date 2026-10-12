@@ -60,17 +60,17 @@ export function SupportChat() {
   const emailSubject = encodeURIComponent(`FabBazaar support ${ticket?.id}${orderId ? ` · Order ${orderId}` : ''}`);
   const emailBody = encodeURIComponent(`Ticket: ${ticket?.id}\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nTopic: ${topics.find((item) => item.value === topic)?.label}\nOrder: ${orderId || 'Not provided'}\n\n${message}`);
 
-  return <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:px-10">
-    <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-      <section className="self-start rounded-[2rem] border border-brand-200 bg-brand-900 p-7 text-brand-50 sm:p-9">
+  return <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+    <div className="grid items-stretch gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+      <section className="support-intro-panel flex h-full flex-col rounded-2xl border border-brand-200 bg-brand-900 p-6 text-brand-50 sm:p-7">
         <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/50 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-200"><Headset className="h-4 w-4"/> Here 24×7</span>
         <p className="mt-7 text-xs uppercase tracking-[0.25em] text-brand-300">FabBazaar care</p><h1 className="mt-2 font-serif text-4xl sm:text-5xl">How can we help?</h1>
         <p className="mt-4 leading-7 text-brand-100">Get an instant answer for common questions or send our Jaipur team a support request at any hour.</p>
         <div className="mt-7 space-y-3">{topics.map((item) => <button key={item.value} type="button" onClick={() => { setTopic(item.value); setReply(quickReplies[item.value]); }} className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm ${topic === item.value ? 'border-amber-300 bg-white/15 text-white' : 'border-white/15 text-brand-100 hover:bg-white/10'}`}>{item.label}<span aria-hidden="true">›</span></button>)}</div>
-        <a href="mailto:support@fabbazaar.com" className="mt-7 inline-block text-sm text-amber-200 underline underline-offset-4">support@fabbazaar.com</a>
+        <a href="mailto:support@fabbazaar.com" className="mt-auto inline-block pt-7 text-sm text-amber-200 underline underline-offset-4">support@fabbazaar.com</a>
       </section>
 
-      <section className="overflow-hidden rounded-[2rem] border border-brand-200 bg-white shadow-soft">
+      <section className="overflow-hidden rounded-2xl border border-brand-200 bg-white">
         <div className="flex items-center gap-3 border-b border-brand-100 bg-brand-50 px-5 py-4 sm:px-7"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-900 text-amber-200"><Sparkles className="h-5 w-5"/></span><div><h2 className="font-serif text-xl text-brand-900">FabBazaar assistant</h2><p className="text-xs text-brand-600">Automated help · available 24 hours</p></div><span className="ml-auto h-2.5 w-2.5 rounded-full bg-emerald-500"/></div>
         <div className="p-5 sm:p-7">
           <div aria-live="polite" className="rounded-2xl rounded-tl-sm bg-brand-50 p-4 text-sm leading-6 text-brand-800">{reply}</div>

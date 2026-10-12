@@ -108,7 +108,7 @@ export function LoginForm({ initialMode = 'login' }: { initialMode?: AuthMode })
   }
 
   return (
-    <section className="mx-auto w-full max-w-lg rounded-[2rem] border border-brand-100 bg-white p-4 shadow-soft sm:p-7">
+    <section className="glass-panel mx-auto w-full max-w-lg rounded-3xl p-4 sm:p-6">
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-900 text-brand-100">
           {role === 'admin' ? <ShieldCheck className="h-6 w-6" /> : <UserRound className="h-6 w-6" />}
@@ -121,15 +121,14 @@ export function LoginForm({ initialMode = 'login' }: { initialMode?: AuthMode })
         </div>
       </div>
 
-      {!isRegistering && <div className="mt-5 grid grid-cols-2 rounded-2xl bg-brand-50 p-1.5" role="tablist" aria-label="Choose account type">
+      {!isRegistering && <div className="login-role-switch relative isolate mt-5 grid grid-cols-2 rounded-2xl p-1.5" role="tablist" aria-label="Choose account type">
+        <span aria-hidden="true" className={`login-role-indicator${role === 'admin' ? ' is-admin' : ''}`} />
         <button
           type="button"
           role="tab"
           aria-selected={role === 'customer'}
           onClick={() => changeRole('customer')}
-          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium ${
-            role === 'customer' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-600 hover:text-brand-900'
-          }`}
+          className="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium transition-colors duration-300"
         >
           <UserRound className="h-4 w-4" /> Customer
         </button>
@@ -138,9 +137,7 @@ export function LoginForm({ initialMode = 'login' }: { initialMode?: AuthMode })
           role="tab"
           aria-selected={role === 'admin'}
           onClick={() => changeRole('admin')}
-          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium ${
-            role === 'admin' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-600 hover:text-brand-900'
-          }`}
+          className="relative z-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-sm font-medium transition-colors duration-300"
         >
           <ShieldCheck className="h-4 w-4" /> Administrator
         </button>

@@ -1,5 +1,5 @@
-import AccountPage from '../page';
+import { AccountDashboard } from '@/components/account-dashboard';
 
 export default function AccountSecurityPage() {
-  return <AccountPage />;
+  return <AccountDashboard view="security" />;
 }

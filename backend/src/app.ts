@@ -11,6 +11,7 @@ import adminRoutes from './routes/admin';
 import uploadRoutes from './routes/uploads';
 import supportRoutes from './routes/support';
 import promotionRoutes from './routes/promotions';
+import siteRoutes from './routes/site';
 import { uploadsDirectory } from './lib/uploads';
 import { ZodError } from 'zod';
 import { allowedOrigins, authenticationRateLimit, isLocalDevelopmentOrigin, securityHeaders, supportRequestRateLimit } from './middleware/security';
@@ -66,6 +67,7 @@ if (process.env.VERCEL === '1') {
 app.use('/api/support/tickets', supportRequestRateLimit);
 app.use('/api/support', supportRoutes);
 app.use('/api/promotions', promotionRoutes);
+app.use('/api/site', siteRoutes);
 
 app.use((error: unknown, _req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (error instanceof ZodError) {

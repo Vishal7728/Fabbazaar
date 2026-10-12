@@ -84,7 +84,8 @@ export function AdminOverview() {
       setError('Administrator sign-in is required to load store analytics.');
       return;
     }
-    fetch(`${apiBaseUrl}/admin/overview`, { headers: { Authorization: `Bearer ${token}` } })
+    let active = true;
+    const loadOverview = () => fetch(`${apiBaseUrl}/admin/overview`, { headers: { Authorization: `Bearer ${token}` } })
       .then(async (response) => {
         const result: unknown = await response.json();
         if (!response.ok) {
@@ -94,9 +95,12 @@ export function AdminOverview() {
         if (!result || typeof result !== 'object' || !('metrics' in result) || !('charts' in result)) {
           throw new Error('The analytics service returned an invalid response');
         }
-        setOverview(result as OverviewData);
+        if (active) { setOverview(result as OverviewData); setError(''); }
       })
-      .catch((reason: unknown) => setError(reason instanceof Error ? reason.message : 'Unable to load store analytics'));
+      .catch((reason: unknown) => { if (active) setError(reason instanceof Error ? reason.message : 'Unable to load store analytics'); });
+    loadOverview();
+    const timer = window.setInterval(loadOverview, 60_000);
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   if (error) {
@@ -131,7 +135,7 @@ export function AdminOverview() {
         <p className="mt-1 text-sm text-brand-600">Sales and customer metrics from persisted MongoDB records.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {metricCards.map((metric) => (
+        {metricCards.slice(0, 5).map((metric) => (
             <article key={metric.label} className="rounded-2xl border border-brand-200 bg-white p-5">
             <p className="text-xs text-brand-500">{metric.label}</p>
             <p className="mt-2 font-serif text-2xl text-brand-900">{metric.value}</p>
@@ -143,22 +147,26 @@ export function AdminOverview() {
         <TrendChart title="Order trend · 30 days" points={overview.charts.orders} valueKey="count" format={(value) => `${value} orders`} />
         <TrendChart title="Customer growth · 30 days" points={overview.charts.customerGrowth} valueKey="count" format={(value) => `${value} customers`} />
         <section className="rounded-2xl border border-brand-100 bg-white p-6">
-          <h3 className="font-serif text-xl text-brand-900">Best-selling products</h3>
+          <h3 className="font-serif text-xl text-brand-900">Sales mix · best sellers</h3>
           {overview.charts.bestSellers.length === 0 ? (
             <p className="mt-6 rounded-xl bg-brand-50 p-5 text-sm text-brand-600">No paid product sales recorded yet.</p>
           ) : (
-            <ol className="mt-4 divide-y divide-brand-100">
+            <div className="mt-5 flex flex-col items-center gap-6 sm:flex-row">
+            <div className="relative h-40 w-40 shrink-0 rounded-full" style={{ background: `conic-gradient(${overview.charts.bestSellers.map((product, index, all) => { const total = all.reduce((sum, item) => sum + item.revenue, 0) || 1; const start = all.slice(0, index).reduce((sum, item) => sum + item.revenue, 0) / total * 100; const end = start + product.revenue / total * 100; return `${['#244638','#78917e','#a8b9a0','#b9684d','#d9c8ab'][index % 5]} ${start}% ${end}%`; }).join(', ')})` }}><div className="absolute inset-7 flex flex-col items-center justify-center rounded-full bg-white text-center"><span className="text-[10px] uppercase tracking-wide text-brand-500">Top products</span><span className="mt-1 text-xl font-semibold text-brand-900">{overview.charts.bestSellers.length}</span></div></div>
+            <ol className="w-full divide-y divide-brand-100">
               {overview.charts.bestSellers.map((product, index) => (
-                <li key={product.name} className="flex items-center justify-between gap-4 py-3 text-sm">
-                  <span className="text-brand-700">{index + 1}. {product.name} <span className="text-brand-500">· {product.units} sold</span></span>
+                <li key={product.name} className="flex items-center justify-between gap-4 py-2.5 text-xs">
+                  <span className="text-brand-700"><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: ['#244638','#78917e','#a8b9a0','#b9684d','#d9c8ab'][index % 5] }}/>{product.name} <span className="text-brand-500">· {product.units} sold</span></span>
                   <span className="shrink-0 text-brand-900">{money(product.revenue)}</span>
                 </li>
               ))}
             </ol>
+            </div>
           )}
         </section>
       </div>
-      {overview.metrics.lowStockProducts === null && <p className="mt-4 text-xs text-brand-500">Inventory levels are not configured in the current product catalog.</p>}
+      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 rounded-xl border border-brand-200 bg-white px-4 py-3 text-xs text-brand-600">{metricCards.slice(5).map((metric)=><span key={metric.label}><span className="text-brand-500">{metric.label}</span> <strong className="ml-1 text-brand-900">{metric.value}</strong></span>)}</div>
+      {overview.metrics.lowStockProducts === null && <p className="mt-3 text-xs text-brand-500">Inventory levels are not configured in the current product catalog.</p>}
     </section>
   );
 }

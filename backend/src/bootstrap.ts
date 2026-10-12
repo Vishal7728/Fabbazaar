@@ -1,5 +1,6 @@
 import { connectDB } from './config/db';
 import { Product } from './models/Product';
+import { SiteBanner } from './models/SiteBanner';
 import { products } from './data/catalog-products';
 import type { ProductRecord } from './data/seed';
 import { replaceProducts } from './lib/store';
@@ -14,6 +15,7 @@ async function initialize(): Promise<void> {
   if (!connected) throw new Error('MongoDB is unavailable. Check MONGODB_URI and database access.');
 
   await Product.init();
+  await SiteBanner.init();
   await Product.updateMany({ collection: { $exists: false } }, { $set: { collection: 'Bazaar Exclusive' } });
   if (await Product.countDocuments() === 0) await Product.insertMany(products);
   const catalog = await Product.find().lean();

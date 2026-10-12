@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, Search, UserRound, Menu, X, LogOut } from 'lucide-react';
+import { ShoppingBasket, Search, UserRound, Menu, X, LogOut, Heart, Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/components/cart-provider';
@@ -11,8 +11,14 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountPath, setAccountPath] = useState('/login');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const { itemCount } = useCart();
   const pathname = usePathname();
+
+  useEffect(() => {
+    const currentTheme = document.documentElement.dataset.theme;
+    setTheme(currentTheme === 'dark' ? 'dark' : 'light');
+  }, []);
 
   useEffect(() => {
     const syncAccount = () => {
@@ -39,6 +45,13 @@ export function Navbar() {
     window.location.assign('/login');
   }
 
+  function toggleTheme() {
+    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = nextTheme;
+    window.localStorage.setItem('fabbazaar-theme', nextTheme);
+    setTheme(nextTheme);
+  }
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -48,92 +61,98 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-amber-500/60 bg-black text-amber-100 shadow-soft">
-      <div className="flex min-h-10 items-center justify-center gap-2 bg-rose-950 px-3 py-2 text-center text-xs font-semibold text-white sm:text-sm">
-        <span className="rounded-full bg-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-950">Hot</span>
-        <span>Navratri festive deals · Bedsheet sets ₹699 (MRP ₹2,399)</span>
-        <Link href="/products" className="font-bold text-amber-200 underline underline-offset-4 hover:text-white">Shop now</Link>
-      </div>
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-3 px-5 py-3 sm:px-8 lg:px-10">
-        <Link href="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-brand-300 bg-black shadow-sm sm:h-11 sm:w-11">
-            <Image src="/images/fabbazaar-monogram.jpeg" alt="" width={44} height={44} className="h-full w-full object-cover" priority />
-          </span>
-          <div className="leading-tight">
-            <p className="text-xl italic tracking-wide text-brand-50 sm:text-2xl" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-              Fab<span className="text-amber-400">Bazaar</span><sup className="ml-0.5 align-super font-sans text-[9px] not-italic text-amber-300">™</sup>
-            </p>
-            <p className="mt-0.5 font-sans text-[8px] font-normal not-italic uppercase tracking-[0.15em] text-brand-300 sm:text-[9px] sm:tracking-[0.2em]">Celebrating Tradition</p>
+    <header className="site-navbar sticky top-0 z-50 border-b border-[#e6e0d5] bg-[#faf7f0]/95 text-[#244638] backdrop-blur-md">
+      <div className="offer-bar flex min-h-8 items-center justify-center gap-3 overflow-hidden bg-[#244638] px-3 py-1.5 text-[10px] font-medium tracking-wide text-[#faf7f0] sm:text-xs">
+        <div className="offer-window min-w-0 flex-1 overflow-hidden" aria-label="Festive offer: bedsheet sets ₹699, previously ₹2,399">
+          <div className="offer-track flex w-max items-center gap-12 whitespace-nowrap">
+            <span>✦ Festive offer · Printed bedsheet sets ₹699 · MRP ₹2,399 · Discover the collection ✦</span>
+            <span aria-hidden="true">✦ Festive offer · Printed bedsheet sets ₹699 · MRP ₹2,399 · Discover the collection ✦</span>
           </div>
+        </div>
+        <Link href="/products" className="shrink-0 rounded-full border border-white/45 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-white hover:text-[#244638] sm:text-[10px]">Shop offer</Link>
+      </div>
+      <div className="navbar-main-row mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-1 px-4 py-1 sm:px-8 lg:px-10">
+        <Link href="/" className="brand-lockup relative flex h-[62px] w-[88px] min-w-0 items-center overflow-hidden sm:h-[70px] sm:w-[100px]" aria-label="FabBazaar home">
+          <span className="absolute inset-0 bg-[#18372c]" />
+          <Image src="/images/logo.jpeg" alt="FabBazaar · Celebrating Tradition" width={1080} height={1016} className="brand-dark-image relative h-full w-full object-contain mix-blend-screen" priority />
+          <span aria-hidden="true" className="brand-light-lockup absolute inset-0 z-10 hidden flex-col items-center justify-center text-center">
+            <span className="brand-light-monogram flex h-[48%] items-center font-serif font-semibold leading-none text-[#b78c32]"><span>F</span><span>B</span></span>
+            <span className="brand-light-wordmark font-serif text-[9px] font-semibold italic leading-none text-[#18372c] sm:text-[10px]">FabBazaar</span>
+            <span className="brand-light-tagline mt-1 font-serif text-[4px] italic leading-none tracking-wide text-[#53675a] sm:text-[5px]">Celebrating Tradition</span>
+          </span>
+          <span className="brand-tm-mask brand-tm-mask-navbar absolute left-[84%] top-[53%] h-[8%] w-[13%] bg-[#18372c]" />
         </Link>
 
-        <nav className="hidden items-center gap-3 text-sm font-medium text-amber-300 md:flex">
+        <nav className="navbar-primary-nav hidden items-center gap-1 text-sm font-medium text-[#244638] md:flex">
           <Link
             href="/"
-            className="rounded-md border border-transparent px-3 py-2 text-sm font-medium text-amber-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-black hover:text-amber-200 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
           >
             Home
           </Link>
           <Link
             href="/products"
-            className="rounded-md border border-transparent px-3 py-2 text-sm font-medium text-amber-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-black hover:text-amber-200 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
           >
             Shop
           </Link>
           <Link
             href="/about"
-            className="rounded-md border border-transparent px-3 py-2 text-sm font-medium text-amber-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-black hover:text-amber-200 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
           >
             About
           </Link>
             <Link
             href="/support"
-            className="rounded-md border border-transparent px-3 py-2 text-sm font-medium text-amber-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-black hover:text-amber-200 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
           >Support</Link>
           <Link
             href="/contact"
-            className="rounded-md border border-transparent px-3 py-2 text-sm font-medium text-amber-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-black hover:text-amber-200 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
           >
             Contact
           </Link>
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <form onSubmit={handleSearch} className="hidden h-10 items-center md:flex">
+        <div className="navbar-actions flex shrink-0 items-center gap-2 sm:gap-3">
+          <form onSubmit={handleSearch} className="navbar-search-form hidden h-10 items-center md:flex">
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Find your favourite print"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-[180px] rounded-l-lg border border-brand-500 bg-brand-50 px-4 py-2 text-brand-900 placeholder:text-brand-600 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-400 sm:w-[220px]"
+              className="navbar-search h-9 w-[185px] rounded-l-full border border-[#e6e0d5] bg-white px-4 py-2 text-sm text-[#292d29] placeholder:text-[#70736c] focus:border-[#244638] focus:outline-none focus:ring-2 focus:ring-[#244638]/15 sm:w-[220px]"
             />
             <button
               type="submit"
-              className="navbar-search-button inline-flex h-10 w-12 shrink-0 items-center justify-center rounded-r-lg border border-brand-400 bg-brand-400 transition-colors duration-200 hover:border-brand-300 hover:bg-brand-300"
+              className="navbar-search-button inline-flex h-9 w-11 shrink-0 items-center justify-center rounded-r-full border border-[#244638] bg-[#244638] text-white transition-colors hover:bg-[#18372c]"
               aria-label="Search"
             >
               <Search className="h-6 w-6" strokeWidth={2.25} />
             </button>
           </form>
-          <Link href="/account/wishlist" className="hidden rounded-full border border-brand-500 p-2 text-brand-100 transition-all duration-200 hover:border-brand-300 hover:text-brand-50 sm:inline-flex" aria-label="Wishlist">
-            <span className="text-sm" aria-hidden="true">♡</span>
+          <button type="button" onClick={toggleTheme} className="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full border" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
+            {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+          </button>
+          <Link href="/account/wishlist" className="hidden rounded-full border border-[#e6e0d5] p-2 text-[#244638] transition-all duration-200 hover:border-[#a8b9a0] hover:bg-[#f2ebdd] sm:inline-flex" aria-label="Wishlist">
+            <Heart className="h-4 w-4" aria-hidden="true" />
           </Link>
-          <Link href={accountPath} className="rounded-full border border-amber-700 p-2 text-amber-200 transition-all duration-200 hover:border-amber-400 hover:text-amber-100" aria-label={accountPath === '/login' ? 'Sign in' : 'Your account'}>
+          <Link href={accountPath} className="rounded-full border border-[#e6e0d5] p-2 text-[#244638] transition-all duration-200 hover:border-[#a8b9a0] hover:bg-[#f2ebdd]" aria-label={accountPath === '/login' ? 'Sign in' : 'Your account'}>
             <UserRound className="h-4 w-4" />
           </Link>
-          {accountPath !== '/login' && <button type="button" onClick={signOut} className="hidden items-center gap-1.5 rounded-full border border-amber-700 px-3 py-2 text-xs font-medium text-amber-200 transition hover:border-amber-400 hover:text-amber-100 sm:inline-flex" aria-label="Sign out"><LogOut className="h-3.5 w-3.5"/>Sign out</button>}
-          <Link href="/cart" className="relative rounded-full bg-brand-900 p-2 text-brand-100 transition-all duration-200 hover:bg-brand-700" aria-label={`Cart, ${itemCount} items`}>
-            <ShoppingBag className="h-4 w-4" />
+          {accountPath !== '/login' && <button type="button" onClick={signOut} className="hidden items-center gap-1.5 rounded-full border border-[#e6e0d5] px-3 py-2 text-xs font-medium text-[#244638] transition hover:border-[#a8b9a0] hover:bg-[#f2ebdd] sm:inline-flex" aria-label="Sign out" title="Sign out"><LogOut className="h-3.5 w-3.5"/>Sign out</button>}
+          <Link href="/cart" className="relative rounded-full bg-[#244638] p-2 text-white transition-all duration-200 hover:bg-[#18372c]" aria-label={`Cart, ${itemCount} items`}>
+            <ShoppingBasket className="h-4 w-4" />
             {itemCount > 0 && <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-400 px-1 text-[10px] font-bold text-brand-900">{itemCount}</span>}
           </Link>
-          <button type="button" onClick={() => setMenuOpen((open) => !open)} className="inline-flex rounded-full border border-brand-500 p-2 text-brand-100 hover:border-brand-300 md:hidden" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>{menuOpen ? <X className="h-5 w-5"/> : <Menu className="h-5 w-5"/>}</button>
+          <button type="button" onClick={() => setMenuOpen((open) => !open)} className="inline-flex rounded-full border border-[#e6e0d5] p-2 text-[#244638] hover:border-[#a8b9a0] hover:bg-[#f2ebdd] md:hidden" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>{menuOpen ? <X className="h-5 w-5"/> : <Menu className="h-5 w-5"/>}</button>
         </div>
-        <form onSubmit={handleSearch} className={pathname === '/register' ? 'hidden' : 'flex h-11 w-full items-center md:hidden'}>
-          <input type="search" placeholder="Search products…" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} className="h-11 min-w-0 flex-1 rounded-l-xl border border-brand-500 bg-brand-50 px-4 text-brand-900 placeholder:text-brand-600 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-400" aria-label="Search products" />
-          <button type="submit" className="navbar-search-button inline-flex h-11 w-12 shrink-0 items-center justify-center rounded-r-xl border border-brand-400 bg-brand-400 hover:border-brand-300 hover:bg-brand-300" aria-label="Search"><Search className="h-5 w-5"/></button>
+        <form onSubmit={handleSearch} className={`navbar-search-form ${pathname === '/register' ? 'hidden' : 'flex h-10 w-full items-center md:hidden'}`}>
+          <input type="search" placeholder="Find your favourite print" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} className="navbar-search h-10 min-w-0 flex-1 rounded-l-full border border-[#e6e0d5] bg-white px-4 text-sm text-[#292d29] placeholder:text-[#70736c] focus:border-[#244638] focus:outline-none focus:ring-2 focus:ring-[#244638]/15" aria-label="Search products" />
+          <button type="submit" className="navbar-search-button inline-flex h-10 w-11 shrink-0 items-center justify-center rounded-r-full border border-[#244638] bg-[#244638] text-white hover:bg-[#18372c]" aria-label="Search"><Search className="h-5 w-5"/></button>
         </form>
       </div>
-      {menuOpen && <nav className="border-t border-amber-500/40 bg-black px-5 py-3 text-sm font-medium text-amber-300 md:hidden"><div className="mx-auto flex max-w-7xl flex-wrap gap-2">{[['Home','/'],['Shop','/products'],['About','/about'],['Support','/support'],['Contact','/contact']].map(([label,href])=><Link key={href} href={href} onClick={()=>setMenuOpen(false)} className="rounded-md border border-transparent px-4 py-2 transition-all hover:-translate-y-0.5 hover:border-amber-400 hover:shadow-[0_3px_0_0_#b9864f,0_8px_18px_rgba(212,175,55,0.18)]">{label}</Link>)}</div></nav>}
+      {menuOpen && <nav className="border-t border-[#e6e0d5] bg-[#faf7f0]/98 px-5 py-3 text-sm font-medium text-[#244638] md:hidden"><div className="mx-auto flex max-w-7xl flex-wrap gap-2">{[['Home','/'],['Shop','/products'],['About','/about'],['Support','/support'],['Contact','/contact']].map(([label,href])=><Link key={href} href={href} onClick={()=>setMenuOpen(false)} className="rounded-full border border-[#e6e0d5] px-4 py-2 transition hover:border-[#a8b9a0] hover:bg-[#f2ebdd]">{label}</Link>)}</div></nav>}
     </header>
   );
 }
