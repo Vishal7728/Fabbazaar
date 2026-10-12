@@ -4,20 +4,27 @@ import { useEffect } from 'react';
 
 export function SystemTheme() {
   useEffect(() => {
-    const preference = window.matchMedia('(prefers-color-scheme: dark)');
+    let timer: number;
     const applyTheme = () => {
-      const savedTheme = window.localStorage.getItem('fabbazaar-theme');
-      document.documentElement.dataset.theme = savedTheme === 'light' || savedTheme === 'dark'
-        ? savedTheme
-        : preference.matches ? 'dark' : 'light';
+      const now = new Date();
+      const hour = now.getHours();
+      document.documentElement.dataset.theme = hour >= 7 && hour < 19 ? 'light' : 'dark';
+
+      const nextSwitch = new Date(now);
+      if (hour >= 19) nextSwitch.setDate(nextSwitch.getDate() + 1);
+      nextSwitch.setHours(hour >= 7 && hour < 19 ? 19 : 7, 0, 0, 0);
+
+      window.clearTimeout(timer);
+      timer = window.setTimeout(applyTheme, nextSwitch.getTime() - now.getTime());
     };
 
     applyTheme();
-    preference.addEventListener('change', applyTheme);
-    window.addEventListener('storage', applyTheme);
+    window.addEventListener('focus', applyTheme);
+    document.addEventListener('visibilitychange', applyTheme);
     return () => {
-      preference.removeEventListener('change', applyTheme);
-      window.removeEventListener('storage', applyTheme);
+      window.clearTimeout(timer);
+      window.removeEventListener('focus', applyTheme);
+      document.removeEventListener('visibilitychange', applyTheme);
     };
   }, []);
 

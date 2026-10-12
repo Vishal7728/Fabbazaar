@@ -118,8 +118,6 @@ body {
 [data-theme='dark'] .product-card-shell [class*="bg-white/90"] { background: rgba(12, 11, 10, .92) !important; border-color: #735922 !important; color: #f4c84f !important; }
 [data-theme='dark'] .product-card-shell [class*="bg-white/90"] button { background: transparent !important; border-color: #735922 !important; color: #f4c84f !important; }
 [data-theme='dark'] .product-card-shell { background: #191714; }
-[data-theme='dark'] .site-navbar .nav-link { border-radius: .55rem !important; }
-[data-theme='dark'] .site-navbar .nav-link:hover { background: rgba(202, 157, 43, .08) !important; border-color: #e3b63e !important; }
 
 .contact-option,
 .contact-location { position: relative; background: rgba(255, 253, 248, .68); }
@@ -445,12 +443,10 @@ textarea:focus {
 [data-theme='dark'] .site-navbar .nav-link,
 [data-theme='dark'] .site-navbar a.rounded-full.border,
 [data-theme='dark'] .site-navbar button.md\:hidden { color: #f4c84f; }
-[data-theme='dark'] .site-navbar .nav-link:hover,
 [data-theme='dark'] .site-navbar a.rounded-full.border:hover,
 [data-theme='dark'] .site-navbar button.md\:hidden:hover { background-color: #30271d; border-color: #b68b32; }
-[data-theme='dark'] .site-navbar nav.md\:hidden { background-color: #11100e; border-color: #55452d; color: #f7f0e2; }
-[data-theme='dark'] .site-navbar nav.md\:hidden a { color: #f4c84f; border-color: #55452d; }
-[data-theme='dark'] .site-navbar nav.md\:hidden a:hover { background-color: #30271d; }
+[data-theme='dark'] .site-navbar .mobile-navbar-menu { background-color: #11100e; border-color: #55452d; color: #f7f0e2; }
+[data-theme='dark'] .site-navbar .mobile-navbar-menu a { color: #f4c84f; border-color: #55452d; }
 
 /* Night mode uses the black, gold and oxblood brand palette from the reference. */
 [data-theme='dark'] .offer-bar { background: #4b0717 !important; color: #fff4d2 !important; border-color: #71401d; }
@@ -590,12 +586,8 @@ textarea:focus {
   border-color: rgba(227, 182, 62, .72) !important;
   box-shadow: 0 8px 22px rgba(0, 0, 0, .24), 0 0 18px rgba(227, 182, 62, .1) !important;
 }
-.theme-toggle { border-color: #d8c9ad; background: rgba(255, 253, 248, .82); color: #244638; box-shadow: 0 2px 8px rgba(36, 70, 56, .06); }
-.theme-toggle:hover { transform: rotate(-8deg) scale(1.06); border-color: #a57822; background: #f2ebdd; box-shadow: 0 0 14px rgba(165, 120, 34, .16); }
-[data-theme='dark'] .theme-toggle { border-color: rgba(214, 170, 69, .48); background: #171512; color: #f0c85c; box-shadow: inset 0 0 0 1px rgba(214, 170, 69, .06); }
-[data-theme='dark'] .theme-toggle:hover { background: #30271d; border-color: #efc85b; box-shadow: 0 0 16px rgba(227, 182, 62, .2); }
 
-/* Light-mode navigation should read as a distinct ivory and sage header. */
+/* Preserve the shared black-and-gold navigation treatment in daytime mode. */
 :root[data-theme='light'] .site-navbar {
   background-color: rgba(255, 253, 248, .97) !important;
   color: #244638;
@@ -706,25 +698,21 @@ textarea:focus {
 :root[data-theme='light'] .site-navbar .offer-bar > a { color: #f4d887 !important; border-color: rgba(224, 183, 83, .55) !important; }
 :root[data-theme='light'] .site-navbar .offer-bar > a:hover { background: #c49a3a !important; color: #11100d !important; }
 :root[data-theme='light'] .site-navbar .nav-link { color: #fffdf8 !important; }
-:root[data-theme='light'] .site-navbar .nav-link:hover,
-:root[data-theme='light'] .site-navbar .nav-link:focus-visible { color: #ffdc73 !important; background: rgba(196, 154, 58, .14) !important; border-color: #b78c32 !important; }
 :root[data-theme='light'] .site-navbar .navbar-search-form { border-color: rgba(196, 154, 58, .7); }
 :root[data-theme='light'] .site-navbar .navbar-search { background: #fffdf8 !important; color: #171512 !important; }
 :root[data-theme='light'] .site-navbar .navbar-search-button { background: #c49a3a !important; color: #11100d !important; }
-:root[data-theme='light'] .site-navbar .theme-toggle,
 :root[data-theme='light'] .site-navbar a[aria-label='Wishlist'],
 :root[data-theme='light'] .site-navbar a[aria-label='Sign in'],
 :root[data-theme='light'] .site-navbar a[aria-label='Your account'],
 :root[data-theme='light'] .site-navbar button[aria-label='Open menu'] { border-color: rgba(196, 154, 58, .55) !important; background: #141311 !important; color: #f4d887 !important; }
-:root[data-theme='light'] .site-navbar .theme-toggle:hover,
 :root[data-theme='light'] .site-navbar a[aria-label='Wishlist']:hover,
 :root[data-theme='light'] .site-navbar a[aria-label='Sign in']:hover,
 :root[data-theme='light'] .site-navbar a[aria-label='Your account']:hover { background: #c49a3a !important; color: #11100d !important; }
 :root[data-theme='light'] .site-navbar button[aria-label='Sign out'] { color: #f4d887 !important; border-color: rgba(196, 154, 58, .5) !important; }
 :root[data-theme='light'] .site-navbar button[aria-label='Sign out']:hover { background: #c49a3a !important; color: #11100d !important; }
 :root[data-theme='light'] .site-navbar a[aria-label^='Cart'] { background: #c49a3a !important; color: #11100d !important; }
-:root[data-theme='light'] .site-navbar nav.md\\:hidden { background-color: #090908 !important; color: #fffdf8 !important; border-color: rgba(183, 140, 50, .4) !important; }
-:root[data-theme='light'] .site-navbar nav.md\\:hidden a { border-color: rgba(196, 154, 58, .4); color: #fffdf8; }
+:root[data-theme='light'] .site-navbar .mobile-navbar-menu { background-color: #090908 !important; color: #fffdf8 !important; border-color: rgba(183, 140, 50, .4) !important; }
+:root[data-theme='light'] .site-navbar .mobile-navbar-menu a { border-color: rgba(196, 154, 58, .4); color: #fffdf8; }
 /* Keep the original logo artwork on its dark field in both themes. */
 :root[data-theme='light'] .site-navbar .brand-lockup > span:first-child,
 :root[data-theme='light'] .site-navbar .brand-tm-mask-navbar { background-color: #080807 !important; }
@@ -792,6 +780,40 @@ textarea:focus {
 :root[data-theme='light'] .login-diya { color: #f0cf70; background: #171512; border-color: #bd9335; box-shadow: 0 6px 20px rgba(32, 27, 17, .2), inset 0 0 0 3px rgba(237, 201, 106, .12), 0 0 22px rgba(196, 154, 58, .18); }
 :root[data-theme='light'] .glass-panel button[type='submit'] { color: #f6df9d !important; background: #171512 !important; border: 1px solid #bd9335; box-shadow: 0 5px 14px rgba(32, 27, 17, .16); }
 :root[data-theme='light'] .glass-panel button[type='submit']:hover:not(:disabled) { color: #171512 !important; background: #d0a33f !important; box-shadow: 0 9px 22px rgba(143, 103, 28, .25); }
+
+/* Keep the navigation interaction visually identical in both automatically selected themes. */
+.site-navbar .navbar-primary-nav .nav-link,
+.site-navbar .mobile-navbar-menu a {
+  border-radius: .55rem !important;
+  transition: color .18s ease, background-color .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+.site-navbar .navbar-primary-nav .nav-link:hover,
+.site-navbar .navbar-primary-nav .nav-link:focus-visible,
+.site-navbar .mobile-navbar-menu a:hover,
+.site-navbar .mobile-navbar-menu a:focus-visible {
+  color: #ffdc73 !important;
+  background: rgba(196, 154, 58, .14) !important;
+  border-color: #b78c32 !important;
+  box-shadow: 0 0 0 1px rgba(183, 140, 50, .12), 0 4px 14px rgba(196, 154, 58, .12) !important;
+  transform: translateY(-1px);
+}
+.site-navbar .navbar-primary-nav .nav-link:focus-visible,
+.site-navbar .mobile-navbar-menu a:focus-visible { outline: 2px solid #d3aa4d; outline-offset: 2px; }
+.site-navbar .mobile-navbar-menu { background: #090908; border-color: rgba(183, 140, 50, .4); color: #fffdf8; }
+.site-navbar .mobile-navbar-menu a { border-color: rgba(196, 154, 58, .4); color: #fffdf8; }
+.site-navbar .nav-link[aria-current='page'],
+.site-navbar .mobile-navbar-menu a[aria-current='page'] { color: #f4d887 !important; }
+
+.cookie-consent-panel,
+.cookie-settings {
+  color: #211e19;
+  border-color: rgba(183, 140, 50, .42);
+  background: rgba(255, 253, 248, .96);
+  backdrop-filter: blur(16px);
+}
+.cookie-settings { color: #f4d887; background: #11100e; }
+[data-theme='dark'] .cookie-consent-panel { color: #f7f0e2; background: rgba(25, 22, 18, .97); }
+[data-theme='dark'] .cookie-settings { color: #f4d887; background: #11100e; }
 
 @media (prefers-reduced-motion: reduce) {
   :root[data-theme='light'] .product-card-shell,

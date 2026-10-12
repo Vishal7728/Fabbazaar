@@ -4,6 +4,7 @@ import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { CartProvider } from '@/components/cart-provider';
 import { SystemTheme } from '@/components/system-theme';
+import { CookieConsent } from '@/components/cookie-consent';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <Script id="system-theme-init" strategy="beforeInteractive">
-          {`(() => { const savedTheme = window.localStorage.getItem('fabbazaar-theme'); document.documentElement.dataset.theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; })();`}
+          {`(() => { const hour = new Date().getHours(); document.documentElement.dataset.theme = hour >= 7 && hour < 19 ? 'light' : 'dark'; })();`}
         </Script>
       </head>
       <body>
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </CartProvider>
         </div>
+        <CookieConsent />
       </body>
     </html>
   );

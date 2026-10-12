@@ -40,7 +40,7 @@ export function Footer() {
         </div>
       </div>
       <div className="relative border-t border-[#496857] px-4 py-3 text-center text-[10px] tracking-wide text-[#d4dfd0]">
-        © 2026 FabBazaar. Crafted with heritage and care.
+        © 2026 FabBazaar. Celebrating Tradition.
       </div>
     </footer>
   );

@@ -2,23 +2,25 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBasket, Search, UserRound, Menu, X, LogOut, Heart, Moon, Sun } from 'lucide-react';
+import { ShoppingBasket, Search, UserRound, Menu, X, LogOut, Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/components/cart-provider';
+
+const NAV_ITEMS = [
+  { label: 'Home', href: '/' },
+  { label: 'Shop', href: '/products' },
+  { label: 'About', href: '/about' },
+  { label: 'Support', href: '/support' },
+  { label: 'Contact', href: '/contact' },
+];
 
 export function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountPath, setAccountPath] = useState('/login');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const { itemCount } = useCart();
   const pathname = usePathname();
-
-  useEffect(() => {
-    const currentTheme = document.documentElement.dataset.theme;
-    setTheme(currentTheme === 'dark' ? 'dark' : 'light');
-  }, []);
 
   useEffect(() => {
     const syncAccount = () => {
@@ -43,13 +45,6 @@ export function Navbar() {
     sessionStorage.removeItem('fabbazaar-user');
     window.dispatchEvent(new Event('fabbazaar-auth-change'));
     window.location.assign('/login');
-  }
-
-  function toggleTheme() {
-    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = nextTheme;
-    window.localStorage.setItem('fabbazaar-theme', nextTheme);
-    setTheme(nextTheme);
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -83,35 +78,17 @@ export function Navbar() {
           <span className="brand-tm-mask brand-tm-mask-navbar absolute left-[84%] top-[53%] h-[8%] w-[13%] bg-[#18372c]" />
         </Link>
 
-        <nav className="navbar-primary-nav hidden items-center gap-1 text-sm font-medium text-[#244638] md:flex">
-          <Link
-            href="/"
-            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
-          >
-            Home
-          </Link>
-          <Link
-            href="/products"
-            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
-          >
-            Shop
-          </Link>
-          <Link
-            href="/about"
-            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
-          >
-            About
-          </Link>
+        <nav aria-label="Main navigation" className="navbar-primary-nav hidden items-center gap-1 text-sm font-medium text-[#244638] md:flex">
+          {NAV_ITEMS.map(({ label, href }) => (
             <Link
-            href="/support"
-            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
-          >Support</Link>
-          <Link
-            href="/contact"
-            className="nav-link rounded-full border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] transition-all hover:border-[#a8b9a0] hover:bg-[#f2ebdd] hover:text-[#18372c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#244638]"
-          >
-            Contact
-          </Link>
+              key={href}
+              href={href}
+              aria-current={pathname === href ? 'page' : undefined}
+              className="nav-link rounded-lg border border-transparent px-3 py-2 text-sm tracking-wide text-[#244638] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
 
         <div className="navbar-actions flex shrink-0 items-center gap-2 sm:gap-3">
@@ -131,9 +108,6 @@ export function Navbar() {
               <Search className="h-6 w-6" strokeWidth={2.25} />
             </button>
           </form>
-          <button type="button" onClick={toggleTheme} className="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full border" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
-            {theme === 'dark' ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
-          </button>
           <Link href="/account/wishlist" className="hidden rounded-full border border-[#e6e0d5] p-2 text-[#244638] transition-all duration-200 hover:border-[#a8b9a0] hover:bg-[#f2ebdd] sm:inline-flex" aria-label="Wishlist">
             <Heart className="h-4 w-4" aria-hidden="true" />
           </Link>
@@ -152,7 +126,23 @@ export function Navbar() {
           <button type="submit" className="navbar-search-button inline-flex h-10 w-11 shrink-0 items-center justify-center rounded-r-full border border-[#244638] bg-[#244638] text-white hover:bg-[#18372c]" aria-label="Search"><Search className="h-5 w-5"/></button>
         </form>
       </div>
-      {menuOpen && <nav className="border-t border-[#e6e0d5] bg-[#faf7f0]/98 px-5 py-3 text-sm font-medium text-[#244638] md:hidden"><div className="mx-auto flex max-w-7xl flex-wrap gap-2">{[['Home','/'],['Shop','/products'],['About','/about'],['Support','/support'],['Contact','/contact']].map(([label,href])=><Link key={href} href={href} onClick={()=>setMenuOpen(false)} className="rounded-full border border-[#e6e0d5] px-4 py-2 transition hover:border-[#a8b9a0] hover:bg-[#f2ebdd]">{label}</Link>)}</div></nav>}
+      {menuOpen && (
+        <nav aria-label="Mobile navigation" className="mobile-navbar-menu border-t px-5 py-3 text-sm font-medium md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-wrap gap-2">
+            {NAV_ITEMS.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                aria-current={pathname === href ? 'page' : undefined}
+                onClick={() => setMenuOpen(false)}
+                className="rounded-lg border px-4 py-2 transition"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
